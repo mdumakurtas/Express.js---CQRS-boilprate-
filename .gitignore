@@ -1,0 +1,26 @@
+# Editor directories and files
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# Node directories
+node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Environment variables file
+.env
+
+# Distribution / packaging
+dist
+build
+
+# Caches
+.npm
+.cache
+.eslintcache
+
