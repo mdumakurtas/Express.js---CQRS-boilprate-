@@ -1,25 +1,30 @@
-import { Repository } from 'typeorm';
 import { Request, Response } from 'express';
-import { Test } from '../../domain/entities';
-import dataSource from '../../config/data-source';
+import { GetTestsHandler } from '../../application/queries/get-tests.handler';
+import { GetTestsQuery } from '../../application/queries/get-tests.query';
+import { CreateTestHandler } from '../../application/commands/create-test.handler';
+import { CreateTestCommand } from '../../application/commands/create-test.command';
 
 export class TestController {
-  private readonly testRepository: Repository<Test>;
+  private readonly getTestHandler: GetTestsHandler;
+  private readonly createTestHandler: CreateTestHandler;
+
   constructor() {
-    this.testRepository = dataSource.getRepository(Test);
+    this.getTestHandler = new GetTestsHandler();
+    this.createTestHandler = new CreateTestHandler();
   }
 
   getAll = async (req: Request, res: Response) => {
-    const tests = await this.testRepository.find();
+    const tests = await this.getTestHandler.execute(new GetTestsQuery());
 
     res.json(tests);
   };
 
   create = async (req: Request, res: Response) => {
-    const newTest = new Test();
-    newTest.name = 'Some test document';
+    const { name } = req.body;
 
-    const test = await this.testRepository.save(newTest);
+    const test = await this.createTestHandler.execute(
+      new CreateTestCommand(name),
+    );
 
     res.json(test);
   };
