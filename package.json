@@ -1,0 +1,21 @@
+{
+  "name": "coffeemug",
+  "version": "0.0.1",
+  "license": "Proprietary",
+  "description": "Test exercise for Coffee Mug recruitment.",
+  "author": "Mateusz Duma-Kurtas <mateusz.kurtas@gmail.com>",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "node dist/app.js",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
