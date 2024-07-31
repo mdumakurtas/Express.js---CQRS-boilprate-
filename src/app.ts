@@ -1,6 +1,20 @@
+import 'express-async-errors';
 import express from 'express';
 import apiRouter from './infrastructure/routes';
-import dataSource from './config/data-source';
+import { dataSource } from './config';
+import { errorHttpHandler } from './infrastructure/middleware';
+import { logError, logInfo } from './application/utils';
+
+const startDatabase = async () => {
+  try {
+    logInfo('Connecting to database...');
+    await dataSource.initialize();
+    logInfo('Connected to database');
+  } catch (error) {
+    logError('Error connecting to database');
+    throw error;
+  }
+};
 
 const startServer = async () => {
   const app = express();
@@ -8,20 +22,11 @@ const startServer = async () => {
 
   app.use('/', apiRouter);
 
-  app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-  });
-};
+  app.use(errorHttpHandler);
 
-const startDatabase = async () => {
-  try {
-    console.log('Connecting to database...');
-    await dataSource.initialize();
-    console.log('Connected to database');
-  } catch (error) {
-    console.error('Error connecting to database');
-    throw error;
-  }
+  app.listen(3000, () => {
+    logInfo('Server is running on port 3000');
+  });
 };
 
 const startApp = async () => {
@@ -29,7 +34,7 @@ const startApp = async () => {
     await startDatabase();
     await startServer();
   } catch (error) {
-    console.error('Failed to start application', error);
+    logError('Failed to start application', error);
     process.exit(1);
   }
 };

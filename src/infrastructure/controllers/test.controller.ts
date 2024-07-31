@@ -4,6 +4,9 @@ import {
   CreateTestCommand,
   CreateTestHandler,
 } from '../../application/commands';
+import { CreateTestDto } from '../dtos';
+import { plainToInstance } from 'class-transformer';
+import { validateDto } from '../../application/utils';
 
 export class TestController {
   private readonly getTestHandler: GetTestsHandler;
@@ -21,10 +24,11 @@ export class TestController {
   };
 
   create = async (req: Request, res: Response) => {
-    const { name } = req.body;
+    const createTestDto = plainToInstance(CreateTestDto, req.body);
+    await validateDto(createTestDto);
 
     const test = await this.createTestHandler.execute(
-      new CreateTestCommand(name),
+      new CreateTestCommand(createTestDto.name),
     );
 
     res.json(test);
