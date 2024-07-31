@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
-import { GetTestsHandler } from '../../application/queries/get-tests.handler';
-import { GetTestsQuery } from '../../application/queries/get-tests.query';
-import { CreateTestHandler } from '../../application/commands/create-test.handler';
-import { CreateTestCommand } from '../../application/commands/create-test.command';
+import { GetTestsHandler, GetTestsQuery } from '../../application/queries';
+import {
+  CreateTestCommand,
+  CreateTestHandler,
+} from '../../application/commands';
 
 export class TestController {
   private readonly getTestHandler: GetTestsHandler;
