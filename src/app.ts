@@ -1,5 +1,6 @@
 import express from 'express';
 import apiRouter from './infrastructure/routes';
+import dataSource from './config/data-source';
 
 const startServer = async () => {
   const app = express();
@@ -12,4 +13,25 @@ const startServer = async () => {
   });
 };
 
-void startServer();
+const startDatabase = async () => {
+  try {
+    console.log('Connecting to database...');
+    await dataSource.initialize();
+    console.log('Connected to database');
+  } catch (error) {
+    console.error('Error connecting to database');
+    throw error;
+  }
+};
+
+const startApp = async () => {
+  try {
+    await startDatabase();
+    await startServer();
+  } catch (error) {
+    console.error('Failed to start application', error);
+    process.exit(1);
+  }
+};
+
+void startApp();
