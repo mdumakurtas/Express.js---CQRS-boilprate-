@@ -20,8 +20,8 @@ export class SellProductHandler
     logCommandHandler(command);
     const { productId, amount } = command;
 
-    const product = await this.productRepository.findOne({
-      where: { _id: new ObjectId(productId) },
+    const product = await this.productRepository.findOneBy({
+      _id: new ObjectId(productId),
     });
 
     if (!product) {
