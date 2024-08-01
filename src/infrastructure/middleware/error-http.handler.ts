@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import { logError } from '../../application/utils';
-import { NotFoundError, ValidationError } from '../../application/errors';
+import {
+  InsufficientStockError,
+  NotFoundError,
+  ValidationError,
+} from '../../application/errors';
 
 const isDebug = process.env.NODE_ENV === 'development';
 
@@ -103,6 +107,13 @@ export const errorHttpHandler = (
 
     logForConsole(requestApiDetails);
     return createHttpErrorResponseBody(res, 404, err.getMessage());
+  }
+
+  if (err instanceof InsufficientStockError) {
+    const requestApiDetails = getRequestApiDetails(req, err.message, err.stack);
+
+    logForConsole(requestApiDetails);
+    return createHttpErrorResponseBody(res, 409, err.message);
   }
 
   const requestApiDetails = getRequestApiDetails(
