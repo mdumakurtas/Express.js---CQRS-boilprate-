@@ -13,6 +13,36 @@ const createHttpErrorResponseBody = (
   res.status(code).json({ message, errors });
 };
 
+const getRequestApiDetails = (
+  req: Request,
+  errors: string,
+  stack?: string,
+) => ({
+  method: req.method,
+  url: req.originalUrl,
+  body: req.body,
+  errors,
+  stack,
+});
+
+const logForConsole = (
+  requestApiDetails: {
+    stack?: string;
+    method: string;
+    body: any;
+    url: string;
+    errors: string;
+  },
+  message = '',
+) => {
+  if (isDebug) {
+    // log to console with clickable stack trace
+    logError(message, requestApiDetails);
+  } else {
+    // log to console json format
+    logError(JSON.stringify(requestApiDetails));
+  }
+};
 export const errorHttpHandler = (
   err: Error,
   req: Request,
@@ -21,29 +51,32 @@ export const errorHttpHandler = (
   next: NextFunction,
 ) => {
   if (err instanceof ValidationError) {
-    const requestApiDetails = {
-      method: req.method,
-      url: req.originalUrl,
-      body: req.body,
-      errors: JSON.stringify(err.errors, null),
-      stack: err.stack,
-    };
+    const requestApiDetails = getRequestApiDetails(
+      req,
+      JSON.stringify(err.errors),
+      err.stack,
+    );
 
-    if (isDebug) {
-      // log to console with clickable stack trace
-      logError('', requestApiDetails);
-    } else {
-      // log to console json format
-      logError(JSON.stringify(requestApiDetails));
-    }
-
+    logForConsole(requestApiDetails);
     return createHttpErrorResponseBody(res, 400, 'Bad Request', err.errors);
   }
 
   if (err instanceof NotFoundError) {
+    const requestApiDetails = getRequestApiDetails(
+      req,
+      err.getMessage(),
+      err.stack,
+    );
+
+    logForConsole(requestApiDetails);
     return createHttpErrorResponseBody(res, 404, err.getMessage());
   }
 
-  logError('Internal Server Error', err);
+  const requestApiDetails = getRequestApiDetails(
+    req,
+    JSON.stringify(err),
+    err.stack,
+  );
+  logForConsole(requestApiDetails, 'Internal Server Error');
   return createHttpErrorResponseBody(res, 500, 'Internal Server Error');
 };
