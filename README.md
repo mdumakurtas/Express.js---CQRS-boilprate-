@@ -23,3 +23,6 @@ npm run start
 
 After running the project, you can access the API at `http://localhost:3000`
 
+## Postman collection
+
+You can import the postman collection from the file [coffemug.postman_collection.json](docs/coffemug.postman_collection.json) to test the API
