@@ -1,9 +1,10 @@
 import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import { ObjectId } from 'mongodb';
 
 @Entity()
 export class Test {
   @ObjectIdColumn()
-  _id: string;
+  _id: ObjectId;
 
   @Column()
   name: string;
