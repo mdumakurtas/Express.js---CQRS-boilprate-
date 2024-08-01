@@ -4,6 +4,12 @@ import { NotFoundError, ValidationError } from '../../application/errors';
 
 const isDebug = process.env.NODE_ENV === 'development';
 
+type BadRequestError = {
+  property: string;
+  children: BadRequestError[];
+  constraints: Record<string, string>;
+};
+
 const createHttpErrorResponseBody = (
   res: Response,
   code: number,
@@ -17,10 +23,11 @@ const getRequestApiDetails = (
   req: Request,
   errors: string,
   stack?: string,
+  body?: string,
 ) => ({
   method: req.method,
   url: req.originalUrl,
-  body: req.body,
+  body: body ?? req.body,
   errors,
   stack,
 });
@@ -43,6 +50,7 @@ const logForConsole = (
     logError(JSON.stringify(requestApiDetails));
   }
 };
+
 export const errorHttpHandler = (
   err: Error,
   req: Request,
@@ -59,6 +67,31 @@ export const errorHttpHandler = (
 
     logForConsole(requestApiDetails);
     return createHttpErrorResponseBody(res, 400, 'Bad Request', err.errors);
+  }
+
+  if (
+    'status' in err &&
+    err.status === 400 &&
+    'type' in err &&
+    err.type === 'entity.parse.failed' &&
+    'body' in err
+  ) {
+    const requestApiDetails = getRequestApiDetails(
+      req,
+      err.message,
+      err.stack,
+      (err.body as string).replace(/\s+/g, ''),
+    );
+    const errors: BadRequestError = {
+      property: 'body',
+      children: [],
+      constraints: {
+        invalidJson: err.message,
+      },
+    };
+
+    logForConsole(requestApiDetails);
+    return createHttpErrorResponseBody(res, 400, 'Bad request', [errors]);
   }
 
   if (err instanceof NotFoundError) {
