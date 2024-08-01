@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { Order, Product, Test } from '../domain/entities';
+import { Order, Product } from '../domain/entities';
 
 export const dataSource = new DataSource({
   type: 'mongodb',
@@ -8,6 +8,6 @@ export const dataSource = new DataSource({
   database: process.env.MONGO_DB_NAME,
   synchronize: true,
   logging: true,
-  entities: [Test, Product, Order],
+  entities: [Product, Order],
   useUnifiedTopology: true,
 });

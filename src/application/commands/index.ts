@@ -8,5 +8,3 @@ export * from './sell-product.command';
 export * from './sell-product.handler';
 export * from './create-order.command';
 export * from './create-order.handler';
-export * from './create-test.command';
-export * from './create-test.handler';
