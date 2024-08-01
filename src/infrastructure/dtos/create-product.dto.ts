@@ -1,6 +1,7 @@
 import {
   IsNotEmpty,
   IsNumber,
+  IsPositive,
   IsString,
   MaxLength,
   Min,
@@ -19,7 +20,7 @@ export class CreateProductDto {
 
   @IsNotEmpty()
   @IsNumber({ maxDecimalPlaces: 2 })
-  @Min(0)
+  @IsPositive()
   price: number;
 
   @IsNotEmpty()
