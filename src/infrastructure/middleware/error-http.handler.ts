@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { logError } from '../../application/utils';
-import { ValidationError } from '../../application/errors';
+import { NotFoundError, ValidationError } from '../../application/errors';
 
 const isDebug = process.env.NODE_ENV === 'development';
 
@@ -37,14 +37,13 @@ export const errorHttpHandler = (
       logError(JSON.stringify(requestApiDetails));
     }
 
-    return createHttpErrorResponseBody(
-      res,
-      400,
-      'Validation Error',
-      err.errors,
-    );
+    return createHttpErrorResponseBody(res, 400, 'Bad Request', err.errors);
+  }
+
+  if (err instanceof NotFoundError) {
+    return createHttpErrorResponseBody(res, 404, err.getMessage());
   }
 
   logError('Internal Server Error', err);
-  createHttpErrorResponseBody(res, 500, 'Internal Server Error');
+  return createHttpErrorResponseBody(res, 500, 'Internal Server Error');
 };

@@ -4,6 +4,7 @@ import apiRouter from './infrastructure/routes';
 import { dataSource } from './config';
 import { errorHttpHandler } from './infrastructure/middleware';
 import { logError, logInfo } from './application/utils';
+import { notFoundRoute } from './infrastructure/middleware/not-found-route';
 
 const startDatabase = async () => {
   try {
@@ -21,6 +22,7 @@ const startServer = async () => {
   app.use(express.json());
 
   app.use('/', apiRouter);
+  app.use('*', notFoundRoute);
 
   app.use(errorHttpHandler);
 
