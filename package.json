@@ -1,8 +1,8 @@
 {
-  "name": "coffeemug",
+  "name": "expressjs-cqrs-boilprate",
   "version": "0.0.1",
   "license": "Proprietary",
-  "description": "Test exercise for Coffee Mug recruitment.",
+  "description": "Boilprate Express.js with CQRS and working example.",
   "author": "Mateusz Duma-Kurtas <mateusz.kurtas@gmail.com>",
   "main": "dist/app.js",
   "scripts": {
