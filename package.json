@@ -1,0 +1,39 @@
+{
+  "name": "coffeemug",
+  "version": "0.0.1",
+  "license": "Proprietary",
+  "description": "Test exercise for Coffee Mug recruitment.",
+  "author": "Mateusz Duma-Kurtas <mateusz.kurtas@gmail.com>",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "node --env-file .env dist/app.js",
+    "build": "tsc",
+    "prettier:fix": "prettier --write 'src/**/*.ts'",
+    "eslint:fix": "eslint --fix 'src/**/*.ts'",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "./postinstall.sh"
+  },
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "express": "^4.19.2",
+    "express-async-errors": "^3.1.1",
+    "mongodb": "^5.9.2",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "3.3.3",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
