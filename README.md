@@ -1,4 +1,4 @@
-# Coffee mug - test exercise
+# Express.js - CQRS boilprate with example
 
 ## Setup project
 
